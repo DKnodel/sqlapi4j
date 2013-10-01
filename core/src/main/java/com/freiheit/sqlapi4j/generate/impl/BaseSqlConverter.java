@@ -1,0 +1,90 @@
+/**
+ * Copyright 2013 freiheit.com technologies gmbh
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+package com.freiheit.sqlapi4j.generate.impl;
+
+import java.sql.Clob;
+import java.sql.Types;
+import java.util.Calendar;
+
+import com.freiheit.sqlapi4j.generate.SqlStdConverter;
+import com.freiheit.sqlapi4j.meta.ColumnConverter;
+import com.freiheit.sqlapi4j.meta.DbEnumType;
+import com.freiheit.sqlapi4j.meta.impl.CalendarColumnConverter;
+import com.freiheit.sqlapi4j.meta.impl.ClobColumnConverter;
+import com.freiheit.sqlapi4j.meta.impl.DefaultColumnConverter;
+import com.freiheit.sqlapi4j.meta.impl.DefaultStringColumnConverter;
+import com.freiheit.sqlapi4j.meta.impl.NumberColumnConverter;
+
+public class BaseSqlConverter implements SqlStdConverter {
+
+    private static final String STRING_SQL_TYPE= "VARCHAR";
+    private static final String INT_SQL_TYPE= "INT";
+    private static final String TIMESTAMP_SQL_TYPE= "TIMESTAMP";
+    private static final String LONG_SQL_TYPE= "BIGINT";
+    private static final String BOOLEAN_SQL_TYPE= "BOOLEAN";
+    private static final String FLOAT_SQL_TYPE = "FLOAT";
+    private static final String CLOB_SQL_TYPE = "CLOB";
+
+    @Override
+    public ColumnConverter<Boolean,Boolean> getBooleanConverter() {
+        return new DefaultColumnConverter<Boolean>( Types.BOOLEAN, BOOLEAN_SQL_TYPE);
+    }
+
+    @Override
+    public ColumnConverter<Long,?> getLongConverter() {
+        return new NumberColumnConverter<Long,Number>( Types.INTEGER, NumberColumnConverter.NumberType.LONG, LONG_SQL_TYPE);
+    }
+
+    @Override
+    public ColumnConverter<Calendar,?> getDateTimeConverter() {
+        return new CalendarColumnConverter( Types.DATE, TIMESTAMP_SQL_TYPE);
+    }
+
+    @Override
+    public ColumnConverter<Calendar,?> getTimestampConverter() {
+        return new CalendarColumnConverter( Types.TIMESTAMP, TIMESTAMP_SQL_TYPE);
+    }
+
+    @Override
+    public ColumnConverter<Integer,Number> getIntConverter() {
+        return new NumberColumnConverter<Integer,Number>( Types.INTEGER, NumberColumnConverter.NumberType.INT, INT_SQL_TYPE);
+    }
+
+    @Override
+    public ColumnConverter<String,String> getStringConverter() {
+        return new DefaultStringColumnConverter( Types.VARCHAR, STRING_SQL_TYPE);
+    }
+
+    @Override
+    public <E extends Enum<E>> ColumnConverter<E, String> getEnumConverter() {
+        return new DbEnumType.DbEnumTypeConverter<E>( STRING_SQL_TYPE + "(255)");
+    }
+
+    public static String appendSqlStrLen( String sqlStrType, int strLen) {
+        return sqlStrType + "(" + strLen + ")";
+    }
+
+    @Override
+    public ColumnConverter<Float,?> getFloatConverter() {
+        return new NumberColumnConverter<Float,Number>( Types.FLOAT, NumberColumnConverter.NumberType.FLOAT, FLOAT_SQL_TYPE);
+    }
+
+    @Override
+    public ColumnConverter<Clob, ?> getClobConverter() {
+        return new ClobColumnConverter( Types.CLOB, CLOB_SQL_TYPE);
+    }
+}

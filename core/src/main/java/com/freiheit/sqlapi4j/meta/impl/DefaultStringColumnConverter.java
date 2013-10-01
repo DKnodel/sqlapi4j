@@ -14,8 +14,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.freiheit.sqlapi4j.generate.impl;
+package com.freiheit.sqlapi4j.meta.impl;
 
+import com.freiheit.sqlapi4j.generate.impl.BaseSqlConverter;
 import com.freiheit.sqlapi4j.meta.ColumnConverter;
 import com.freiheit.sqlapi4j.meta.DbType;
 
@@ -47,7 +48,7 @@ public class DefaultStringColumnConverter implements ColumnConverter<String,Stri
 	@Override
 	public String getSqlTypeDeclaration( DbType<String> dbType) {
 		int strLen= ((DbType.DbString)dbType).getStrLen();
-		return PsqlStdConverter.appendSqlStrLen( _sqlTypeDecl, strLen);
+		return BaseSqlConverter.appendSqlStrLen( _sqlTypeDecl, strLen);
 	}
 
 }

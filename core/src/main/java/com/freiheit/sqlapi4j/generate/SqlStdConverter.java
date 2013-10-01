@@ -16,6 +16,7 @@
  */
 package com.freiheit.sqlapi4j.generate;
 
+import java.sql.Clob;
 import java.util.Calendar;
 
 import javax.annotation.Nonnull;
@@ -50,4 +51,6 @@ public interface SqlStdConverter {
     @Nonnull
     ColumnConverter<Float, ?> getFloatConverter();
 
+    @Nonnull
+    ColumnConverter<Clob, ?> getClobConverter();
 }

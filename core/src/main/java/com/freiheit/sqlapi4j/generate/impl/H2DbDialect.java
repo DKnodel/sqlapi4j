@@ -16,13 +16,19 @@
  */
 package com.freiheit.sqlapi4j.generate.impl;
 
+import com.freiheit.sqlapi4j.generate.SqlStdConverter;
+import com.freiheit.sqlapi4j.meta.ColumnConverter;
+import com.freiheit.sqlapi4j.meta.DbType;
 import com.freiheit.sqlapi4j.query.FromDef;
 import com.freiheit.sqlapi4j.query.impl.ValueComparisonType;
 
 public class H2DbDialect extends BasicSqlDialect {
 
+    private final SqlStdConverter _h2Converter = new PsqlSqlConverter();
+
     public H2DbDialect( ConverterRegistry parent) {
         super( parent);
+        parent.setDefaults(_h2Converter);
     }
 
     @Override
@@ -61,5 +67,11 @@ public class H2DbDialect extends BasicSqlDialect {
         return false;
     }
 
+    @Override
+    public <T> ColumnConverter<T, ?> getConverterFor( Class<? extends DbType<T>> dbType) {
+        if (dbType.equals(DbType.DbText.class)){
 
+        }
+        return super.getConverterFor(dbType);
+    }
 }

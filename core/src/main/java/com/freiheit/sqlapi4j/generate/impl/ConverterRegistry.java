@@ -33,41 +33,45 @@ import com.freiheit.sqlapi4j.meta.DbType;
 @ParametersAreNonnullByDefault
 public class ConverterRegistry {
 
-	@SuppressWarnings("rawtypes")
+    @SuppressWarnings("rawtypes")
     @Nonnull private final Map<Class<? extends DbType>,ColumnConverter<?, ?>> _converterMap = new HashMap<Class<? extends DbType>,ColumnConverter<?, ?>>();
-	@CheckForNull private final ConverterRegistry _parent;
+    @CheckForNull private final ConverterRegistry _parent;
 
-	public ConverterRegistry(@Nullable final ConverterRegistry parent) {
-	    super();
-		_parent= parent;
-	}
+    public ConverterRegistry(@Nullable final ConverterRegistry parent) {
+        super();
+        _parent= parent;
+    }
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public void setDefaults(final SqlStdConverter stdConv) {
+        _converterMap.put( DbType.DbBoolean.class, stdConv.getBooleanConverter());
+        _converterMap.put( DbType.DbInteger.class, stdConv.getIntConverter());
+        _converterMap.put( DbType.DbLong.class, stdConv.getLongConverter());
+        _converterMap.put( DbType.DbString.class, stdConv.getStringConverter());
+        _converterMap.put( DbType.DbDateTime.class, stdConv.getDateTimeConverter());
+        _converterMap.put( DbType.DbTimestamp.class, stdConv.getTimestampConverter());
+        _converterMap.put( DbEnumType.class, stdConv.<Enum>getEnumConverter());
+        _converterMap.put( DbType.DbFloat.class, stdConv.getFloatConverter());
+        _converterMap.put( DbType.DbText.class, stdConv.getStringConverter());
+    }
 
-		_converterMap.put( DbType.DbBoolean.class, stdConv.getBooleanConverter());
-		_converterMap.put( DbType.DbInteger.class, stdConv.getIntConverter());
-		_converterMap.put( DbType.DbLong.class, stdConv.getLongConverter());
-		_converterMap.put( DbType.DbString.class, stdConv.getStringConverter());
-		_converterMap.put( DbType.DbDateTime.class, stdConv.getDateTimeConverter());
-		_converterMap.put( DbType.DbTimestamp.class, stdConv.getTimestampConverter());
-		_converterMap.put( DbEnumType.class, stdConv.<Enum>getEnumConverter());
-		_converterMap.put(DbType.DbFloat.class, stdConv.getFloatConverter());
-	}
-
-	@CheckForNull
-	public <T> ColumnConverter<T,?> getConverter(@Nullable final Class<? extends DbType<T>> cls) {
-		@SuppressWarnings("unchecked")
+    @CheckForNull
+    public <T> ColumnConverter<T,?> getConverter(@Nullable final Class<? extends DbType<T>> cls) {
+//        ColumnConverter<T,?> parentConv = _parent == null ? null : (ColumnConverter<T,?>)_parent.getConverter( cls);
+//        if ( parentConv != null) {
+//            return parentConv;
+//        }
+        @SuppressWarnings("unchecked")
         ColumnConverter<T,?> conv= (ColumnConverter<T,?>)_converterMap.get( cls);
-		if( conv == null && _parent != null) {
+        if( conv == null && _parent != null) {
             return _parent.getConverter( cls);
         }
-		return conv;
-	}
+        return conv;
+    }
 
-	@Nonnegative
-	public <T> ConverterRegistry registerConverter(final Class<? extends DbType<? extends T>> type, final ColumnConverter<? extends T,?> conv) {
-		_converterMap.put( type, conv);
-		return this;
-	}
+    @Nonnegative
+    public <T> ConverterRegistry registerConverter(final Class<? extends DbType<? extends T>> type, final ColumnConverter<? extends T,?> conv) {
+        _converterMap.put( type, conv);
+        return this;
+    }
 }

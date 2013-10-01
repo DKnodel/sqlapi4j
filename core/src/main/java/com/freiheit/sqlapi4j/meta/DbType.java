@@ -16,6 +16,7 @@
  */
 package com.freiheit.sqlapi4j.meta;
 
+import java.sql.Clob;
 import java.util.Calendar;
 
 import javax.annotation.Nonnegative;
@@ -30,54 +31,60 @@ public interface DbType<T> {
     /**
      * {@link DbType} for integer columns (like INT).
      */
-	static class DbInteger implements DbType<Integer> {
-	}
+    static class DbInteger implements DbType<Integer> {
+    }
 
-	/**
-	 * {@link DbType} for long integer columns (like BIGINT).
-	 */
-	static class DbLong implements DbType<Long> {
-	}
+    /**
+     * {@link DbType} for long integer columns (like BIGINT).
+     */
+    static class DbLong implements DbType<Long> {
+    }
 
-	/**
-	 * {@link DbType} for string columns (like VARCHAR).
-	 */
-	static class DbString implements DbType<String> {
+    /**
+     * {@link DbType} for string columns (like VARCHAR).
+     */
+    static class DbString implements DbType<String> {
 
-		private final int _strLen;
+        private final int _strLen;
 
-		public DbString(final int strLen) {
-			_strLen= strLen;
-		}
+        public DbString(final int strLen) {
+            _strLen= strLen;
+        }
 
-		@Nonnegative
-		public int getStrLen() {
-			return _strLen;
-		}
+        @Nonnegative
+        public int getStrLen() {
+            return _strLen;
+        }
 
-	}
+    }
 
-	/**
-	 * {@link DbType} for boolean columns (like BOOLEAN).
-	 */
-	static class DbBoolean implements DbType<Boolean> {
-	}
+    /**
+     * {@link DbType} for boolean columns (like BOOLEAN).
+     */
+    static class DbBoolean implements DbType<Boolean> {
+    }
 
-	/**
-	 * DbType for date columns (like DATE).
-	 */
-	static class DbDateTime implements DbType<Calendar> {
-	}
+    /**
+     * DbType for date columns (like DATE).
+     */
+    static class DbDateTime implements DbType<Calendar> {
+    }
 
-	/**
-	 * DbType for timestamp columns (like TIMESTAMP).
-	 */
-	static class DbTimestamp implements DbType<Calendar> {
-	}
+    /**
+     * DbType for timestamp columns (like TIMESTAMP).
+     */
+    static class DbTimestamp implements DbType<Calendar> {
+    }
 
-	/**
-	 * DbType for float columns (like FLOAT).
-	 */
-	static class DbFloat implements DbType<Float> {
-	}
+    /**
+     * DbType for float columns (like FLOAT).
+     */
+    static class DbFloat implements DbType<Float> {
+    }
+
+    /**
+     * DbType for endless Clob columns (like CLOB/TEXT/JSON).
+     */
+    static class DbClob implements DbType<Clob> {
+    }
 }
